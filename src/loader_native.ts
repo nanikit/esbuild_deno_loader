@@ -31,7 +31,9 @@ export class NativeLoader implements Loader {
 
   async resolve(specifier: URL): Promise<LoaderResolution> {
     const entry = await this.#infoCache.get(specifier.href);
-    if ("error" in entry) throw new Error(entry.error);
+    if ("error" in entry) {
+      return { kind: "esm", specifier };
+    }
 
     if (entry.kind === "npm") {
       // TODO(lucacasonato): remove parsing once https://github.com/denoland/deno/issues/18043 is resolved
